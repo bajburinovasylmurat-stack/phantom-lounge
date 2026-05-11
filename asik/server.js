@@ -184,7 +184,7 @@ function sendError(res, status, message) {
 function requireAuth(req, res) {
   const auth = req.headers['authorization'] || '';
   const token = auth.replace('Bearer ', '').trim();
-  if (!token || !sessions.has(token)) {
+  if (!token || token !== ADMIN_TOKEN) {
     sendError(res, 401, 'Unauthorized');
     return false;
   }
@@ -266,7 +266,7 @@ async function handleApi(req, res, pathname) {
         sendError(res, 401, 'Қате пароль');
         return;
       }
-      const token = crypto.randomBytes(24).toString('hex');
+      const token = ADMIN_TOKEN;
       // token set
       send(res, 200, { token });
       return;

@@ -17,7 +17,7 @@ const db = new Database(DB_PATH);
 db.pragma('journal_mode = WAL');
 db.pragma('foreign_keys = ON');
 
-const sessions = new Map();
+const ADMIN_TOKEN = require("crypto").createHash("sha256").update(ADMIN_PASSWORD + "_phantom").digest("hex");
 
 const TABLE_LAYOUT_72 = [
   {id:1,x:145,y:772,w:38,h:28},{id:2,x:181,y:772,w:38,h:28},{id:3,x:145,y:745,w:38,h:28},{id:4,x:181,y:745,w:38,h:28},
@@ -267,7 +267,7 @@ async function handleApi(req, res, pathname) {
         return;
       }
       const token = crypto.randomBytes(24).toString('hex');
-      sessions.set(token, Date.now());
+      // token set
       send(res, 200, { token });
       return;
     }

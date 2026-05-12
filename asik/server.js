@@ -7,7 +7,7 @@ const Database = require('better-sqlite3');
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'phantom2026';
 const ROOT = __dirname;
-const PUBLIC_DIR = path.join(ROOT, 'public');
+const PUBLIC_DIR = ROOT;
 const DATA_DIR = path.join(ROOT, 'data');
 const DB_PATH = path.join(DATA_DIR, 'app.db');
 
@@ -146,22 +146,34 @@ function allConcerts(includeHidden) {
   }));
 }
 
-function readBody(req) {
+function readBody(req, res) {
   return new Promise((resolve, reject) => {
     let body = '';
+    let tooLarge = false;
     req.on('data', chunk => {
+      if (tooLarge) return;
       body += chunk;
       if (body.length > 8_000_000) {
-        reject(new Error('Payload too large'));
+        tooLarge = true;
+        const err = new Error('Payload too large');
+        err.statusCode = 413;
+        // Жауапты жіберіп, содан кейін байланысты үземіз
+        if (res && !res.headersSent) {
+          sendError(res, 413, 'Payload too large');
+        }
         req.destroy();
+        reject(err);
       }
     });
     req.on('end', () => {
+      if (tooLarge) return;
       if (!body) return resolve({});
       try { resolve(JSON.parse(body)); }
       catch { reject(new Error('Invalid JSON')); }
     });
-    req.on('error', reject);
+    req.on('error', err => {
+      if (!tooLarge) reject(err);
+    });
   });
 }
 
@@ -261,7 +273,7 @@ async function handleApi(req, res, pathname) {
       return;
     }
     if (req.method === 'POST' && pathname === '/api/admin/login') {
-      const body = await readBody(req);
+      const body = await readBody(req, res);
       if (String(body.password || '') !== ADMIN_PASSWORD) {
         sendError(res, 401, 'Қате пароль');
         return;
@@ -273,7 +285,7 @@ async function handleApi(req, res, pathname) {
     }
     if (req.method === 'POST' && pathname === '/api/admin/concerts') {
       if (!requireAuth(req, res)) return;
-      const c = cleanConcertPayload(await readBody(req));
+      const c = cleanConcertPayload(await readBody(req, res));
       if (!c.name || !c.date || !c.price) {
         sendError(res, 400, 'Name, date and price are required');
         return;
@@ -292,7 +304,7 @@ async function handleApi(req, res, pathname) {
       const id = Number(concertMatch[1]);
       const old = db.prepare('SELECT * FROM concerts WHERE id = ?').get(id);
       if (!old) return sendError(res, 404, 'Concert not found');
-      const c = cleanConcertPayload({ ...old, ...(await readBody(req)) });
+      const c = cleanConcertPayload({ ...old, ...(await readBody(req, res)) });
       db.prepare(`
         UPDATE concerts SET name=@name, artist=@artist, date=@date, time=@time, poster=@poster, desc=@desc, tag=@tag,
         layout=@layout, price=@price, priceRules=@priceRules, kaspiNum=@kaspiNum, kaspiLink=@kaspiLink, waNum=@waNum,
@@ -343,7 +355,7 @@ async function handleApi(req, res, pathname) {
     if (seatsBulkMatch && req.method === 'PUT') {
       if (!requireAuth(req, res)) return;
       const concertId = Number(seatsBulkMatch[1]);
-      const body = await readBody(req);
+      const body = await readBody(req, res);
       const status = body.status === 'taken' ? 'taken' : 'free';
       db.prepare('UPDATE seats SET status = ? WHERE concertId = ?').run(status, concertId);
       db.prepare('UPDATE concerts SET updatedAt = CURRENT_TIMESTAMP WHERE id = ?').run(concertId);
@@ -353,7 +365,9 @@ async function handleApi(req, res, pathname) {
     sendError(res, 404, 'API route not found');
   } catch (err) {
     console.error(err);
-    sendError(res, 500, err.message || 'Server error');
+    if (!res.headersSent) {
+      sendError(res, err.statusCode || 500, err.message || 'Server error');
+    }
   }
 }
 
@@ -366,7 +380,11 @@ const server = http.createServer((req, res) => {
   serveStatic(req, res, url.pathname);
 });
 
+server.on('clientError', (err, socket) => {
+  if (err.code === 'ECONNRESET' || !socket.writable) return;
+  socket.end('HTTP/1.1 400 Bad Request\r\n\r\n');
+});
+
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Phantom Lounge server running on port ${PORT}`);
-  console.log(`Admin password: ${ADMIN_PASSWORD}`);
 });

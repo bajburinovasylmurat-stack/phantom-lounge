@@ -3,11 +3,11 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const Database = require('better-sqlite3');
-
+console.log('DIR:', __dirname, fs.existsSync(path.join(__dirname,'public','index.html')));
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'phantom2026';
 const ROOT = __dirname;
-const PUBLIC_DIR = ROOT;
+const PUBLIC_DIR = path.join(ROOT, 'public');
 const DATA_DIR = path.join(ROOT, 'data');
 const DB_PATH = path.join(DATA_DIR, 'app.db');
 

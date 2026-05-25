@@ -376,12 +376,17 @@ async function showPage(p){
   if(p === 'admin') renderAdmin();
   location.hash = p === 'admin' ? 'admin' : '';
 }
+const KK_MONTHS = ['Қаңтар','Ақпан','Наурыз','Сәуір','Мамыр','Маусым','Шілде','Тамыз','Қыркүйек','Қазан','Қараша','Желтоқсан'];
 function formatDate(dateStr){
   const d = new Date(dateStr + 'T00:00:00');
-  return d.toLocaleString('kk-KZ', {day:'numeric',month:'long',year:'numeric'});
+  return d.getDate() + ' ' + KK_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
+}
+function monthYear(dateStr){
+  const d = new Date(dateStr + 'T00:00:00');
+  return KK_MONTHS[d.getMonth()] + ' ' + d.getFullYear();
 }
 function getMonths(){
-  return [...new Set(concertsData.filter(c => c.visible).map(c => new Date(c.date + 'T00:00:00').toLocaleString('kk-KZ',{month:'long',year:'numeric'})))];
+  return [...new Set(concertsData.filter(c => c.visible).map(c => monthYear(c.date)))];
 }
 function setFilter(f){currentFilter = f; renderConcerts();}
 function renderConcerts(){
@@ -389,7 +394,7 @@ function renderConcerts(){
   document.getElementById('filter-bar').innerHTML = ['Барлығы',...months].map(m => `<button class="filter-btn${m===currentFilter?' active':''}" onclick="setFilter('${escapeHtml(m)}')">${escapeHtml(m.charAt(0).toUpperCase()+m.slice(1))}</button>`).join('');
   let concerts = concertsData.filter(c => c.visible);
   if(currentFilter !== 'Барлығы'){
-    concerts = concerts.filter(c => new Date(c.date + 'T00:00:00').toLocaleString('kk-KZ',{month:'long',year:'numeric'}) === currentFilter);
+    concerts = concerts.filter(c => monthYear(c.date) === currentFilter);
   }
   concerts.sort((a,b) => new Date(a.date) - new Date(b.date));
   const grid = document.getElementById('concerts-grid');

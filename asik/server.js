@@ -8,8 +8,8 @@ const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'phantom2026';
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, 'public');
-const DATA_DIR = path.join(ROOT, 'data');
-const DB_PATH = path.join(DATA_DIR, 'app.db');
+const DB_PATH = process.env.DB_PATH || path.join(ROOT, 'data', 'app.db');
+const DATA_DIR = path.dirname(DB_PATH);
 
 fs.mkdirSync(DATA_DIR, { recursive: true });
 

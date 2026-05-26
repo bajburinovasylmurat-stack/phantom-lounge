@@ -1,5 +1,7 @@
 const http = require('http');
 const https = require('https');
+process.on('uncaughtException', err => { if (err.code !== 'ECONNRESET') console.error('uncaught:', err); });
+process.on('unhandledRejection', err => { if (err && err.code !== 'ECONNRESET') console.error('unhandled:', err); });
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -374,6 +376,8 @@ async function handleApi(req, res, pathname) {
 }
 
 const server = http.createServer((req, res) => {
+  req.on('error', () => {});
+  res.on('error', () => {});
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname.startsWith('/api/')) {
     handleApi(req, res, url.pathname);

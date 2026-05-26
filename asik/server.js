@@ -1,4 +1,5 @@
 const http = require('http');
+const https = require('https');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
@@ -393,7 +394,7 @@ server.listen(PORT, '0.0.0.0', () => {
     : null;
   if (APP_URL) {
     setInterval(() => {
-      http.get(`${APP_URL}/api/concerts`, res => res.resume()).on('error', () => {});
+      https.get(`${APP_URL}/api/concerts`, res => res.resume()).on('error', () => {});
     }, 4 * 60 * 1000);
   }
 });

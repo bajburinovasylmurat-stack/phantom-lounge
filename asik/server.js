@@ -388,12 +388,4 @@ server.on('clientError', (err, socket) => {
 
 server.listen(PORT, '0.0.0.0', () => {
   console.log(`Phantom Lounge server running on port ${PORT}`);
-  const APP_URL = process.env.RAILWAY_PUBLIC_DOMAIN
-    ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}`
-    : null;
-  if (APP_URL) {
-    setInterval(() => {
-      http.get(`${APP_URL}/api/concerts`, res => res.resume()).on('error', () => {});
-    }, 4 * 60 * 1000);
-  }
 });

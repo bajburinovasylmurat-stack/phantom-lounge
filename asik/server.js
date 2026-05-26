@@ -228,7 +228,7 @@ function serveStatic(req, res, pathname) {
     '.svg': 'image/svg+xml'
   }[ext] || 'application/octet-stream';
   res.writeHead(200, { 'Content-Type': type });
-  fs.createReadStream(file).pipe(res);
+  fs.createReadStream(file).on('error', () => res.end()).pipe(res);
 }
 
 function cleanConcertPayload(body) {
@@ -373,6 +373,8 @@ async function handleApi(req, res, pathname) {
 }
 
 const server = http.createServer((req, res) => {
+  req.on('error', () => {});
+  res.on('error', () => {});
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname.startsWith('/api/')) {
     handleApi(req, res, url.pathname);

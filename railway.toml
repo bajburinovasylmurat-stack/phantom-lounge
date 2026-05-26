@@ -2,5 +2,7 @@
 [deploy]
 startCommand = "node asik/server.js"
 region = "us-west2"
+healthcheckPath = "/health"
+healthcheckTimeout = 60
 
 

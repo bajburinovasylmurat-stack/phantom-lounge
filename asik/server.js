@@ -263,6 +263,10 @@ async function handleApi(req, res, pathname) {
   }
 
   try {
+    if (req.method === 'GET' && pathname === '/health') {
+      send(res, 200, { ok: true });
+      return;
+    }
     if (req.method === 'GET' && pathname === '/api/concerts') {
       send(res, 200, { concerts: allConcerts(false) });
       return;

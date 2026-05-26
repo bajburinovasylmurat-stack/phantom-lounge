@@ -364,6 +364,7 @@ async function handleApi(req, res, pathname) {
     }
     sendError(res, 404, 'API route not found');
   } catch (err) {
+    if (err.code === 'ECONNRESET' || err.message === 'aborted') return;
     console.error(err);
     if (!res.headersSent) {
       sendError(res, err.statusCode || 500, err.message || 'Server error');

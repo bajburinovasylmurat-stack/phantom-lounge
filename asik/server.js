@@ -380,6 +380,11 @@ const server = http.createServer((req, res) => {
   req.on('error', () => {});
   res.on('error', () => {});
   const url = new URL(req.url, `http://${req.headers.host}`);
+  if (url.pathname === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end('{"ok":true}');
+    return;
+  }
   if (url.pathname.startsWith('/api/')) {
     handleApi(req, res, url.pathname);
     return;

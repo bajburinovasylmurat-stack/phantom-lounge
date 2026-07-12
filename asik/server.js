@@ -1,8 +1,25 @@
+process.on('uncaughtException', (err) => {
+  console.error('[FATAL] Uncaught exception:', err);
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[FATAL] Unhandled rejection:', reason);
+  process.exit(1);
+});
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const Database = require('better-sqlite3');
+
+let Database;
+try {
+  Database = require('better-sqlite3');
+} catch (err) {
+  console.error('[FATAL] Failed to load better-sqlite3:', err.message);
+  process.exit(1);
+}
+
 console.log('DIR:', __dirname, fs.existsSync(path.join(__dirname,'public','index.html')));
 const PORT = Number(process.env.PORT || 3000);
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'phantom2026';
@@ -11,11 +28,23 @@ const PUBLIC_DIR = path.join(ROOT, 'public');
 const DB_PATH = process.env.DB_PATH || path.join(ROOT, 'data', 'app.db');
 const DATA_DIR = path.dirname(DB_PATH);
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
+try {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+} catch (err) {
+  console.error('[FATAL] Cannot create data directory:', DATA_DIR, err.message);
+  process.exit(1);
+}
 
-const db = new Database(DB_PATH);
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+let db;
+try {
+  db = new Database(DB_PATH);
+  db.pragma('journal_mode = WAL');
+  db.pragma('foreign_keys = ON');
+  console.log('[DB] Opened database at', DB_PATH);
+} catch (err) {
+  console.error('[FATAL] Cannot open database:', err.message);
+  process.exit(1);
+}
 
 const ADMIN_TOKEN = require("crypto").createHash("sha256").update(ADMIN_PASSWORD + "_phantom").digest("hex");
 

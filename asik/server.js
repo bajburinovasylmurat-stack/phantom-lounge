@@ -49,9 +49,6 @@ try {
 const ADMIN_TOKEN = require("crypto").createHash("sha256").update(ADMIN_PASSWORD + "_phantom").digest("hex");
 
 const TABLE_LAYOUT_72 = [
-  {id:1,x:145,y:772,w:38,h:28},{id:2,x:181,y:772,w:38,h:28},{id:3,x:145,y:745,w:38,h:28},{id:4,x:181,y:745,w:38,h:28},
-  {id:5,x:270,y:772,w:38,h:28},{id:6,x:270,y:745,w:38,h:28},{id:7,x:145,y:707,w:38,h:28},{id:8,x:181,y:707,w:38,h:28},
-  {id:9,x:145,y:680,w:38,h:28},{id:10,x:181,y:680,w:38,h:28},{id:11,x:270,y:707,w:38,h:28},{id:12,x:270,y:680,w:38,h:28},
   // ── BAR left column (top→bottom) ──
   {id:9, x:65, y:630,w:38,h:28},{id:10,x:105,y:630,w:38,h:28},
   {id:7, x:65, y:690,w:38,h:28},{id:8, x:105,y:690,w:38,h:28},

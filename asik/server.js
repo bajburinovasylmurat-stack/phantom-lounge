@@ -164,15 +164,51 @@ function ensureSeedData() {
 }
 ensureSeedData();
 
+// Lightweight list — NO poster field (can be large base64), seats fetched in ONE join query
 function allConcerts(includeHidden) {
-  const concerts = db.prepare(`SELECT * FROM concerts ${includeHidden ? '' : 'WHERE visible = 1'} ORDER BY date ASC, time ASC`).all();
-  const seatsStmt = db.prepare('SELECT seatId AS id, price, status, isVIP FROM seats WHERE concertId = ? ORDER BY CAST(seatId AS INTEGER)');
-  return concerts.map(c => ({
-    ...c,
-    visible: Boolean(c.visible),
-    vipPrice: c.price,
-    seats: seatsStmt.all(c.id).map(s => ({ ...s, id: String(s.id), isVIP: Boolean(s.isVIP) }))
-  }));
+  const where = includeHidden ? '' : 'WHERE c.visible = 1';
+  const rows = db.prepare(`
+    SELECT c.id, c.name, c.artist, c.date, c.time, c.desc, c.tag, c.layout,
+           c.price, c.priceRules, c.kaspiNum, c.kaspiLink, c.waNum,
+           c.visible, c.createdAt, c.updatedAt,
+           s.seatId AS s_id, s.price AS s_price, s.status AS s_status, s.isVIP AS s_isVIP
+    FROM concerts c
+    LEFT JOIN seats s ON s.concertId = c.id
+    ${where}
+    ORDER BY c.date ASC, c.time ASC, CAST(s.seatId AS INTEGER) ASC
+  `).all();
+
+  const concertMap = new Map();
+  for (const row of rows) {
+    if (!concertMap.has(row.id)) {
+      concertMap.set(row.id, {
+        id: row.id, name: row.name, artist: row.artist, date: row.date, time: row.time,
+        desc: row.desc, tag: row.tag, layout: row.layout, price: row.price,
+        priceRules: row.priceRules, kaspiNum: row.kaspiNum, kaspiLink: row.kaspiLink,
+        waNum: row.waNum, visible: Boolean(row.visible), vipPrice: row.price,
+        createdAt: row.createdAt, updatedAt: row.updatedAt,
+        poster: null, // excluded from list — loaded on demand via /api/concerts/:id
+        seats: []
+      });
+    }
+    if (row.s_id != null) {
+      concertMap.get(row.id).seats.push({
+        id: String(row.s_id), price: row.s_price,
+        status: row.s_status, isVIP: Boolean(row.s_isVIP)
+      });
+    }
+  }
+  return [...concertMap.values()];
+}
+
+// Full single concert including poster — used for detail view & seat operations
+function getConcertFull(id) {
+  const c = db.prepare('SELECT * FROM concerts WHERE id = ?').get(id);
+  if (!c) return null;
+  const seats = db.prepare(
+    'SELECT seatId AS id, price, status, isVIP FROM seats WHERE concertId = ? ORDER BY CAST(seatId AS INTEGER)'
+  ).all(id).map(s => ({ ...s, id: String(s.id), isVIP: Boolean(s.isVIP) }));
+  return { ...c, visible: Boolean(c.visible), vipPrice: c.price, seats };
 }
 
 function readBody(req, res) {
@@ -372,6 +408,16 @@ async function handleApi(req, res, pathname) {
       send(res, 200, { concerts: allConcerts(true) });
       return;
     }
+    // GET single concert (full, with poster) — for detail/seat view
+    const concertGetMatch = pathname.match(/^\/api\/(?:admin\/)?concerts\/(\d+)$/);
+    if (concertGetMatch && req.method === 'GET') {
+      const id = Number(concertGetMatch[1]);
+      if (pathname.startsWith('/api/admin/') && !requireAuth(req, res)) return;
+      const c = getConcertFull(id);
+      if (!c) return sendError(res, 404, 'Concert not found');
+      send(res, 200, { concert: c });
+      return;
+    }
     const seatMatch = pathname.match(/^\/api\/admin\/concerts\/(\d+)\/seats\/([^/]+)$/);
     if (seatMatch && req.method === 'PATCH') {
       if (!requireAuth(req, res)) return;
@@ -381,7 +427,8 @@ async function handleApi(req, res, pathname) {
       if (!seat) return sendError(res, 404, 'Seat not found');
       db.prepare('UPDATE seats SET status = ? WHERE concertId = ? AND seatId = ?').run(seat.status === 'taken' ? 'free' : 'taken', concertId, seatId);
       db.prepare('UPDATE concerts SET updatedAt = CURRENT_TIMESTAMP WHERE id = ?').run(concertId);
-      send(res, 200, { concerts: allConcerts(true) });
+      // Return only the updated concert (not all) to keep response small
+      send(res, 200, { concert: getConcertFull(concertId) });
       return;
     }
     const seatsBulkMatch = pathname.match(/^\/api\/admin\/concerts\/(\d+)\/seats$/);
@@ -392,7 +439,7 @@ async function handleApi(req, res, pathname) {
       const status = body.status === 'taken' ? 'taken' : 'free';
       db.prepare('UPDATE seats SET status = ? WHERE concertId = ?').run(status, concertId);
       db.prepare('UPDATE concerts SET updatedAt = CURRENT_TIMESTAMP WHERE id = ?').run(concertId);
-      send(res, 200, { concerts: allConcerts(true) });
+      send(res, 200, { concert: getConcertFull(concertId) });
       return;
     }
     sendError(res, 404, 'API route not found');

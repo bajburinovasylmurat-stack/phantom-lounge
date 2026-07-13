@@ -430,12 +430,13 @@ function posterHtml(c, className){
   }
   return '<div class="concert-poster-placeholder"><div class="concert-poster-placeholder-icon">LIVE</div></div>';
 }
-function openConcert(id){
+async function openConcert(id){
   currentConcertId = id;
   selectedSeats = [];
   const c = concertsData.find(x => x.id === id);
   if(!c)return;
-  document.getElementById('detail-bg-wrap').innerHTML = c.poster ? `<img src="${escapeHtml(c.poster)}" class="concert-detail-bg" onerror="this.style.display='none'">` : '<div class="concert-detail-bg-placeholder">LIVE</div>';
+  // Show page immediately with cached data (no poster yet)
+  document.getElementById('detail-bg-wrap').innerHTML = '<div class="concert-detail-bg-placeholder">LIVE</div>';
   document.getElementById('detail-eyebrow').textContent = formatDate(c.date) + ' · ' + c.time;
   document.getElementById('detail-title').textContent = c.name;
   document.getElementById('detail-meta').innerHTML = `<span>${escapeHtml(c.artist || '')}</span> · <span>Phantom Lounge</span> · <span>Алматы</span>`;
@@ -444,6 +445,19 @@ function openConcert(id){
   document.getElementById('page-concert').classList.add('active');
   document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
   window.scrollTo(0,0);
+  // Then load full data (with poster) in background
+  try {
+    const full = await apiRequest(`/api/concerts/${id}`);
+    const fc = normalizeConcert(full.concert);
+    // Cache poster into concertsData entry
+    const idx = concertsData.findIndex(x => x.id === id);
+    if(idx >= 0) concertsData[idx] = { ...concertsData[idx], poster: fc.poster };
+    // Update poster and re-render seats with fresh data
+    if(currentConcertId === id){
+      document.getElementById('detail-bg-wrap').innerHTML = fc.poster ? `<img src="${escapeHtml(fc.poster)}" class="concert-detail-bg" onerror="this.style.display='none'">` : '<div class="concert-detail-bg-placeholder">LIVE</div>';
+      renderConcertDetail(fc);
+    }
+  } catch(e){}
 }
 function renderVenueMap(c, adminMode=false){
   const tl = getLayoutTable(c.layout);
@@ -939,7 +953,11 @@ function renderAdminSeats(){
 async function toggleAdminSeat(seatId){
   try{
     const data = await apiRequest(`/api/admin/concerts/${adminSeatConcertId}/seats/${encodeURIComponent(seatId)}`, {method:'PATCH'});
-    concertsData = data.concerts.map(normalizeConcert);
+    // Response is now { concert } not { concerts } — update only the changed concert
+    const updated = normalizeConcert(data.concert);
+    const idx = concertsData.findIndex(x => x.id === updated.id);
+    if(idx >= 0) concertsData[idx] = { ...concertsData[idx], ...updated };
+    else concertsData.push(updated);
     renderAdminSeats(); renderAdminStats(); renderAdminTable(); renderConcerts();
     const c = concertsData.find(x => x.id === adminSeatConcertId);
     if(currentConcertId === adminSeatConcertId && c)renderConcertDetail(c);
@@ -948,7 +966,10 @@ async function toggleAdminSeat(seatId){
 async function setAdminSeats(status){
   try{
     const data = await apiRequest(`/api/admin/concerts/${adminSeatConcertId}/seats`, {method:'PUT', body:JSON.stringify({status})});
-    concertsData = data.concerts.map(normalizeConcert);
+    const updated = normalizeConcert(data.concert);
+    const idx = concertsData.findIndex(x => x.id === updated.id);
+    if(idx >= 0) concertsData[idx] = { ...concertsData[idx], ...updated };
+    else concertsData.push(updated);
     renderAdminSeats(); renderAdminStats(); renderAdminTable(); renderConcerts();
     const c = concertsData.find(x => x.id === adminSeatConcertId);
     if(currentConcertId === adminSeatConcertId && c)renderConcertDetail(c);

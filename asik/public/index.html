@@ -375,8 +375,30 @@ async function apiRequest(url, options = {}){
 async function loadData(includeHidden=false){
   const data = await apiRequest(includeHidden ? '/api/admin/concerts' : '/api/concerts');
   concertsData = data.concerts.map(normalizeConcert);
+  // Load posters in background after list renders
+  loadPostersBackground();
 }
 function saveData(){return Promise.resolve();}
+// Load posters lazily in background, update cards as each arrives
+async function loadPostersBackground(){
+  for(const c of concertsData){
+    if(c.poster) continue; // already cached
+    try{
+      const full = await apiRequest(`/api/concerts/${c.id}`);
+      if(full.concert && full.concert.poster){
+        const idx = concertsData.findIndex(x => x.id === c.id);
+        if(idx >= 0){
+          concertsData[idx].poster = full.concert.poster;
+          // Update poster element in the card if it exists
+          const cardImg = document.getElementById(`poster-${c.id}`);
+          if(cardImg){
+            cardImg.outerHTML = `<img id="poster-${c.id}" src="${full.concert.poster}" alt="${escapeHtml(c.name)}" class="concert-poster" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="concert-poster-placeholder" style="display:none"><div class="concert-poster-placeholder-icon">LIVE</div></div>`;
+          }
+        }
+      }
+    }catch(e){}
+  }
+}
 
 async function showPage(p){
   document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
@@ -440,9 +462,9 @@ function renderConcerts(){
 }
 function posterHtml(c, className){
   if(c.poster){
-    return `<img src="${escapeHtml(c.poster)}" alt="${escapeHtml(c.name)}" class="${className}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="concert-poster-placeholder" style="display:none"><div class="concert-poster-placeholder-icon">LIVE</div></div>`;
+    return `<img id="poster-${c.id}" src="${escapeHtml(c.poster)}" alt="${escapeHtml(c.name)}" class="${className}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="concert-poster-placeholder" style="display:none"><div class="concert-poster-placeholder-icon">LIVE</div></div>`;
   }
-  return '<div class="concert-poster-placeholder"><div class="concert-poster-placeholder-icon">LIVE</div></div>';
+  return `<div id="poster-${c.id}" class="concert-poster-placeholder"><div class="concert-poster-placeholder-icon">LIVE</div></div>`;
 }
 async function openConcert(id){
   currentConcertId = id;
@@ -871,6 +893,11 @@ async function addConcert(){
   try{
     const data = await apiRequest('/api/admin/concerts', {method:'POST', body:JSON.stringify({name,artist,date,time,poster,desc,tag,layout,price,priceRules,kaspiNum,kaspiLink,waNum,visible:true})});
     concertsData = data.concerts.map(normalizeConcert);
+    // Cache uploaded poster locally (API returns poster-free list for performance)
+    if(poster && data.newId){
+      const nc = concertsData.find(c => c.id === data.newId);
+      if(nc) nc.poster = poster;
+    }
     resetAddForm();
     renderAdminStats(); renderAdminTable(); renderConcerts();
     showNotif('Концерт қосылды');
@@ -948,6 +975,11 @@ async function saveEdit(){
   try{
     const data = await apiRequest(`/api/admin/concerts/${id}`, {method:'PUT', body:JSON.stringify(payload)});
     concertsData = data.concerts.map(normalizeConcert);
+    // Cache poster locally (not returned in list for performance)
+    if(payload.poster && data.updatedId){
+      const nc = concertsData.find(c => c.id === data.updatedId);
+      if(nc) nc.poster = payload.poster;
+    }
     closeModal('edit-modal'); renderAdminStats(); renderAdminTable(); renderConcerts(); showNotif('Өзгерістер сақталды');
   }catch(e){showNotif(e.message);}
 }

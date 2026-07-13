@@ -383,8 +383,9 @@ async function handleApi(req, res, pathname) {
         INSERT INTO concerts (name, artist, date, time, poster, desc, tag, layout, price, priceRules, kaspiNum, kaspiLink, waNum, visible, updatedAt)
         VALUES (@name, @artist, @date, @time, @poster, @desc, @tag, @layout, @price, @priceRules, @kaspiNum, @kaspiLink, @waNum, @visible, CURRENT_TIMESTAMP)
       `).run(c);
-      createSeats(Number(result.lastInsertRowid), c.layout, c.price, c.priceRules);
-      send(res, 201, { concerts: allConcerts(true) });
+      const newId = Number(result.lastInsertRowid);
+      createSeats(newId, c.layout, c.price, c.priceRules);
+      send(res, 201, { concerts: allConcerts(true), newId });
       return;
     }
     const concertMatch = pathname.match(/^\/api\/admin\/concerts\/(\d+)$/);
@@ -407,7 +408,7 @@ async function handleApi(req, res, pathname) {
         const updateSeat = db.prepare('UPDATE seats SET price = ? WHERE concertId = ? AND seatId = ?');
         seats.forEach(s => updateSeat.run(priceForSeatId(s.seatId, c.price, c.priceRules), id, s.seatId));
       }
-      send(res, 200, { concerts: allConcerts(true) });
+      send(res, 200, { concerts: allConcerts(true), updatedId: id });
       return;
     }
     if (concertMatch && req.method === 'DELETE') {

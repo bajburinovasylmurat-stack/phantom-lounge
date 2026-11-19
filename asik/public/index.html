@@ -48,6 +48,38 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.95);b
 .venue-door-frame{background:linear-gradient(180deg,#c9a84c,#8a6820);border-radius:3px 3px 0 0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:2px;font-size:8px;letter-spacing:.06em;color:#fff8e0;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.6)}
 /* Window SVG style */
 .venue-window-svg{position:absolute;top:0;left:120px;right:60px;pointer-events:none}
+
+.hall-outer{padding:10px;background:#fbf8f2}
+.hall-map{--u:calc(100cqw / 1932);container-type:inline-size;position:relative;width:max(100%,520px);aspect-ratio:1/1;margin:0 auto;background:#fff;color:#1a1208;overflow:hidden;border-radius:6px;font-family:'Cormorant Garamond',Georgia,serif}
+.hall-map>*{position:absolute}
+.hall-map [style*="--w"]{left:calc(var(--x)*var(--u));top:calc(var(--y)*var(--u));width:calc(var(--w)*var(--u));height:calc(var(--h)*var(--u))}
+.hm-vip{background:#0b6b3a;color:#e8e8e8;display:flex;align-items:center;justify-content:center}
+.hm-vip span{font-size:calc(150*var(--u));letter-spacing:calc(10*var(--u));font-weight:600;background:linear-gradient(180deg,#fff,#9a9a9a 55%,#eee);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hm-vip-top{left:calc(960*var(--u));top:0;right:0;height:calc(415*var(--u));clip-path:polygon(0 0,100% 0,100% 100%,80.2% 38.5%,0 38.5%)}
+.hm-vip-top span{position:absolute;left:calc(380*var(--u));top:calc(-10*var(--u))}
+.hm-vip-bottom{right:0;bottom:0;width:calc(562*var(--u));height:calc(502*var(--u));clip-path:polygon(100% 0,100% 100%,0 100%)}
+.hm-vip-bottom span{position:absolute;left:calc(200*var(--u));top:calc(200*var(--u));transform:rotate(-42deg)}
+.hm-wc{border:calc(5*var(--u)) solid #d42a2a;border-radius:calc(10*var(--u));color:#d42a2a;font:700 calc(34*var(--u)) Jost,sans-serif;display:flex;align-items:center;justify-content:center}
+.hm-wc span{transform:rotate(90deg)}
+.hm-exit{border:calc(5*var(--u)) solid #8a6230;border-bottom:none;display:flex;align-items:flex-end;justify-content:center;font:700 calc(20*var(--u)) Jost,sans-serif;color:#fff}
+.hm-exit::after{content:'';position:absolute;inset:auto calc(25*var(--u)) 0;height:calc(26*var(--u));background:#1f8a3c;z-index:-1}
+.hm-exit{z-index:0;padding-bottom:calc(2*var(--u))}
+.hm-speaker{background:linear-gradient(160deg,#3a3a3a,#0c0c0c);border-radius:calc(14*var(--u));box-shadow:inset 0 0 0 calc(3*var(--u)) #555}
+.hm-pillar{background:#000;border-radius:calc(14*var(--u))}
+.hm-stage{left:calc(510*var(--u));bottom:0;width:calc(890*var(--u));height:calc(277*var(--u));clip-path:polygon(16% 0,86% 0,100% 100%,0 100%);background:radial-gradient(ellipse at 50% 0,rgba(255,215,120,.55),transparent 55%),repeating-linear-gradient(90deg,#8e0f12 0 calc(18*var(--u)),#c0171c calc(18*var(--u)) calc(36*var(--u)));display:flex;align-items:center;justify-content:center}
+.hm-stage span{font:600 calc(56*var(--u)) Jost,sans-serif;letter-spacing:calc(10*var(--u));color:#ffe9b0;text-shadow:0 0 calc(18*var(--u)) rgba(0,0,0,.6)}
+.hm-label{font-size:calc(62*var(--u));white-space:nowrap;display:flex;align-items:center;justify-content:center}
+.hm-A{color:#0e6b3c}.hm-B{color:#d42a2a}.hm-C{color:#2b2ba8}
+.hm-table{left:calc(var(--x)*var(--u));top:calc(var(--y)*var(--u));width:0;height:0}
+.hm-desk{position:absolute;left:calc(-42*var(--u));top:calc(-68*var(--u));width:calc(84*var(--u));height:calc(136*var(--u));border:calc(3*var(--u)) solid currentColor;background:#fff;box-sizing:border-box}
+.hm-seat{position:absolute;left:calc((var(--x) - 23)*var(--u));top:calc((var(--y) - 20)*var(--u));width:calc(46*var(--u));height:calc(40*var(--u));padding:0;border:calc(3*var(--u)) solid currentColor;border-radius:calc(5*var(--u));background:#fff;color:inherit;font:600 calc(27*var(--u)) Jost,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;box-sizing:border-box;transition:transform .12s,background .15s}
+.hm-seat.hm-l{border-left-width:calc(8*var(--u))}.hm-seat.hm-r{border-right-width:calc(8*var(--u))}
+.hm-seat span{display:block;line-height:1}
+.hm-seat:not(.taken):hover{transform:scale(1.25);z-index:2;background:#fff6d8}
+.hm-seat.selected{background:#f3c84b;color:#1a1208;border-color:#9c7414}
+.hm-seat.taken{background:#4a4a4a;border-color:#4a4a4a;color:#fff;cursor:not-allowed}
+.seat-admin-grid .hm-seat.taken{cursor:pointer}
+@media(max-width:700px){.hall-map{width:max(100%,680px)}}
 </style>
 </head>
 <body>
@@ -135,11 +167,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.95);b
         <div class="form-group"><label>Сипаттама</label><textarea id="new-desc" placeholder="Концерт туралы қысқаша ақпарат..."></textarea></div>
         <div class="form-row">
           <div class="form-group"><label>Тег</label><input type="text" id="new-tag" placeholder="Жаңа / Хит / VIP"></div>
-          <div class="form-group"><label>Зал конфигурациясы</label><select id="new-layout"><option value="medium" selected>Орта зал 72 орын</option><option value="large84">Үлкен зал 84 орын</option></select></div>
+          <div class="form-group"><label>Зал конфигурациясы</label><select id="new-layout"><option value="hall208" selected>Үстелді зал 208 орын (A·B·C)</option><option value="hall128">Шағын үстелді зал 128 орын</option><option value="large84">Ескі зал 84 орын</option><option value="medium">Ескі зал 72 орын</option></select></div>
         </div>
         <div class="form-row">
           <div class="form-group"><label>Негізгі баға (₸) *</label><input type="number" id="new-price" placeholder="5000"><div class="form-hint">Ереже жазылмаған орындарға осы баға қойылады</div></div>
-          <div class="form-group"><label>Баға ережелері</label><textarea id="new-price-rules" placeholder="1-20: 20000&#10;54-72: 10000"></textarea><div class="form-hint">Мысал: 1-20: 20000, 54-72: 10000</div></div>
+          <div class="form-group"><label>Баға ережелері</label><textarea id="new-price-rules" placeholder="B 1-24: 20000&#10;A: 10000&#10;C: 10000"></textarea><div class="form-hint">Мысал: B 1-24: 20000 · A: 10000 (бүкіл A сектор) · 1-20: 15000 (барлық секторда)</div></div>
         </div>
         <div style="border-top:1px solid var(--border);padding-top:20px;margin-top:8px">
           <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Kaspi төлем деректері</p>
@@ -181,13 +213,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.95);b
       <div class="form-group"><label>Афиша URL</label><input type="url" id="edit-poster"></div>
       <div class="form-group"><label>Афиша файлдан</label><input type="file" id="edit-poster-file" accept="image/*" onchange="handlePosterFile(event,'edit')"><div class="file-preview" id="edit-file-preview"><img alt=""><span>Файл таңдалды</span></div></div>
     </div>
+    <div class="form-group"><label>Зал схемасы</label><select id="edit-layout"><option value="hall208">Үстелді зал 208 орын (A·B·C)</option><option value="hall128">Шағын үстелді зал 128 орын</option><option value="large84">Ескі зал 84 орын</option><option value="medium">Ескі зал 72 орын</option></select><div class="form-hint">Схеманы ауыстырсаңыз, барлық бронь өшіп, орындар қайта жасалады</div></div>
     <div class="form-group"><label>Сипаттама</label><textarea id="edit-desc"></textarea></div>
     <div class="form-row">
       <div class="form-group"><label>Тег</label><input type="text" id="edit-tag"></div>
       <div class="form-group"><label>Негізгі баға (₸)</label><input type="number" id="edit-price"></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Баға ережелері</label><textarea id="edit-price-rules" placeholder="1-20: 20000&#10;54-72: 10000"></textarea></div>
+      <div class="form-group"><label>Баға ережелері</label><textarea id="edit-price-rules" placeholder="B 1-24: 20000&#10;A: 10000&#10;C: 10000"></textarea></div>
       <div class="form-group"><label>Kaspi номер</label><input type="text" id="edit-kaspi-num"></div>
     </div>
     <div class="form-row">
@@ -225,6 +258,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.95);b
 
 <div class="notification" id="notif"></div>
 
+<script src="/halls.js"></script>
 <script>
 const API_BASE = '';
 const LAYOUTS = { small:{rows:6,cols:8}, medium:{rows:8,cols:10}, large:{rows:10,cols:12} };
@@ -296,35 +330,7 @@ const DEFAULT_CONCERTS = [
 function escapeHtml(value){
   return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
 }
-function parsePriceRules(text){
-  const rules = [];
-  String(text || '').split(/\n|;/).forEach(line => {
-    const clean = line.trim();
-    if(!clean)return;
-    const range = clean.match(/(\d+)\s*(?:-|–|—)\s*(\d+)/) || clean.match(/\b(\d+)\b/);
-    const numbers = clean.match(/\d[\d\s]*/g) || [];
-    if(!range || !numbers.length)return;
-    const start = Number(range[1]);
-    const end = Number(range[2] || range[1]);
-    const rangeText = range[0];
-    let priceNumber = null;
-    if(/[:=]/.test(clean)){
-      const after = clean.split(/[:=]/).slice(1).join(':');
-      const priceMatch = after.match(/\d[\d\s]*/);
-      if(priceMatch)priceNumber = Number(priceMatch[0].replace(/\s/g,''));
-    }
-    if(!priceNumber){
-      const candidates = numbers.map(n => Number(n.replace(/\s/g,''))).filter(n => String(n) !== String(start) && String(n) !== String(end) && !rangeText.replace(/\s/g,'').includes(String(n)));
-      priceNumber = candidates[0] || null;
-    }
-    if(start && end && priceNumber)rules.push({start:Math.min(start,end),end:Math.max(start,end),price:priceNumber});
-  });
-  return rules;
-}
-function priceForSeatId(id, basePrice, priceRules){
-  const rule = parsePriceRules(priceRules).find(r => Number(id) >= r.start && Number(id) <= r.end);
-  return rule ? rule.price : Number(basePrice);
-}
+const {parsePriceRules, priceForSeatId, seatLabel, isHallLayout, hallSeatIds, HALL_LAYOUTS, priceRuleText} = window.PhantomHalls;
 function applyPriceRulesToSeats(seats, basePrice, priceRules){
   seats.forEach(s => { s.price = priceForSeatId(s.id, basePrice, priceRules); });
   return seats;
@@ -332,7 +338,7 @@ function applyPriceRulesToSeats(seats, basePrice, priceRules){
 function priceRulesSummary(c){
   const rules = parsePriceRules(c.priceRules);
   if(!rules.length)return `Барлық орын: ${Number(c.price).toLocaleString('ru-RU')} ₸`;
-  return rules.map(r => `${r.start}-${r.end}: ${Number(r.price).toLocaleString('ru-RU')} ₸`).join('<br>');
+  return rules.map(r => `${escapeHtml(priceRuleText(r))}: ${Number(r.price).toLocaleString('ru-RU')} ₸`).join('<br>');
 }
 function priceRangeText(c){
   const prices = c.seats.map(s => Number(s.price)).filter(Boolean);
@@ -343,22 +349,25 @@ function priceRangeText(c){
 function getLayoutTable(layout){
   return layout === 'large84' ? TABLE_LAYOUT_84 : TABLE_LAYOUT_72;
 }
+function layoutSeatIds(layout){
+  return hallSeatIds(layout) || getLayoutTable(layout).map(t => String(t.id));
+}
 function generateSeats(layout, price, vipPrice, priceRules=''){
-  const tl = getLayoutTable(layout);
-  return applyPriceRulesToSeats(tl.map(t => ({id:String(t.id),row:'',col:t.id,price:Number(price),status:'free',isVIP:false})), price, priceRules);
+  return applyPriceRulesToSeats(layoutSeatIds(layout).map(id => ({id,row:'',col:id,price:Number(price),status:'free',isVIP:false})), price, priceRules);
 }
 function normalizeConcert(c){
   const price = Number(c.price) || 0;
   const vipPrice = Number(c.vipPrice) || price * 2;
   const priceRules = c.priceRules || '';
   const layout = c.layout || 'medium';
-  const tl = getLayoutTable(layout);
+  const ids = layoutSeatIds(layout);
+  const idSet = new Set(ids);
   const oldSeats = Array.isArray(c.seats) ? c.seats : [];
-  const hasVenueMap = oldSeats.length === tl.length && oldSeats.every(s => /^\d+$/.test(String(s.id)));
+  const hasVenueMap = oldSeats.length === ids.length && oldSeats.every(s => idSet.has(String(s.id)));
   const oldStatusById = new Map(oldSeats.map(s => [String(s.id), s.status]));
   let seats = hasVenueMap
     ? oldSeats.map(s => ({...s, id:String(s.id), price:Number(s.price)||price, isVIP:false}))
-    : tl.map(t => ({id:String(t.id),row:'',col:t.id,price,status:oldStatusById.get(String(t.id)) || 'free',isVIP:false}));
+    : ids.map(id => ({id,row:'',col:id,price,status:oldStatusById.get(id) || 'free',isVIP:false}));
   seats = applyPriceRulesToSeats(seats, price, priceRules);
   return {...c, layout, price, vipPrice, priceRules, waNum:c.waNum || digitsOnly(c.kaspiNum || '77070000001'), seats};
 }
@@ -492,10 +501,41 @@ async function openConcert(id){
     if(currentConcertId === id){
       document.getElementById('detail-bg-wrap').innerHTML = fc.poster ? `<img src="${escapeHtml(fc.poster)}" class="concert-detail-bg" onerror="this.style.display='none'">` : '<div class="concert-detail-bg-placeholder">LIVE</div>';
       renderConcertDetail(fc);
+      renderSelectedSeats();
     }
   } catch(e){}
 }
+function renderHallMap(c, adminMode=false){
+  const hall = HALL_LAYOUTS[c.layout];
+  const seatsById = new Map(c.seats.map(s => [String(s.id), s]));
+  const POS = {lt:[-64,-28,'l'], lb:[-64,28,'l'], rt:[64,-28,'r'], rb:[64,28,'r']};
+  const tablesHtml = hall.tables.map(t => {
+    const chairs = Object.entries(t.seats).map(([pos, n]) => {
+      const id = t.sector + n;
+      const seat = seatsById.get(id) || {id, price:c.price, status:'free'};
+      const taken = seat.status === 'taken';
+      const selected = selectedSeats.some(s => s.seatId === id);
+      const action = adminMode ? `toggleAdminSeat('${id}')` : (taken ? '' : `toggleSeat(${c.id},'${id}')`);
+      const [dx, dy, side] = POS[pos];
+      return `<button class="hm-seat hm-${side} ${taken?'taken':''} ${selected?'selected':''}" id="${adminMode?'admin-seat':'seat'}-${c.id}-${id}" style="--x:${dx};--y:${dy}" onclick="${action}" title="${t.sector} сектор, ${n} орын · ${Number(seat.price).toLocaleString('ru-RU')} ₸${taken?' · бос емес':''}"><span style="transform:rotate(${-t.a}deg)">${n}</span></button>`;
+    }).join('');
+    return `<div class="hm-table hm-${t.sector}" style="--x:${t.x};--y:${t.y};transform:rotate(${t.a}deg)"><div class="hm-desk"></div>${chairs}</div>`;
+  }).join('');
+  const box = (cls, x, y, w, h, inner='') => `<div class="${cls}" style="--x:${x};--y:${y};--w:${w};--h:${h}">${inner}</div>`;
+  return `<div class="venue-map-outer hall-outer"><div class="hall-map">
+    <div class="hm-vip hm-vip-top"><span>VIP</span></div>
+    <div class="hm-vip hm-vip-bottom"><span>VIP</span></div>
+    ${box('hm-wc',4,20,44,100,'<span>WC</span>')}${box('hm-wc',4,400,44,100,'<span>WC</span>')}
+    ${box('hm-exit',640,0,120,40,'ШЫҒУ')}${box('hm-exit',88,1892,120,40,'ШЫҒУ')}
+    ${box('hm-speaker',258,6,104,168)}${box('hm-speaker',1622,164,104,168)}${box('hm-speaker',474,1750,62,104)}${box('hm-speaker',1398,1750,62,104)}
+    ${box('hm-pillar',572,610,62,62)}${box('hm-pillar',1309,610,62,62)}${box('hm-pillar',562,1274,62,62)}${box('hm-pillar',1299,1274,62,62)}
+    <div class="hm-stage"><span>САХНА</span></div>
+    ${box('hm-label hm-A',150,170,460,80,'A - секторы')}${box('hm-label hm-B',740,150,460,80,'B - секторы')}${box('hm-label hm-C',1290,230,460,80,'C - секторы')}
+    ${tablesHtml}
+  </div></div>`;
+}
 function renderVenueMap(c, adminMode=false){
+  if(isHallLayout(c.layout)) return renderHallMap(c, adminMode);
   const tl = getLayoutTable(c.layout);
   const seatsById = new Map(c.seats.map(s => [String(s.id), s]));
   const seatButtons = tl.map(t => {
@@ -714,7 +754,7 @@ function renderConcertDetail(c){
       <div class="seat-map-title">Орын Картасы</div>
       <div class="seat-legend">
         <div class="legend-item"><div class="legend-dot free"></div>Бос</div>
-        <div class="legend-item"><div class="legend-dot taken"></div>Сатылған / бронь</div>
+        <div class="legend-item"><div class="legend-dot taken" ${isHallLayout(c.layout)?'style="background:#4a4a4a;border-color:#4a4a4a"':''}></div>Сатылған / бронь</div>
         <div class="legend-item"><div class="legend-dot selected"></div>Таңдалған</div>
       </div>
       ${renderVenueMap(c)}
@@ -742,7 +782,7 @@ function toggleSeat(concertId, seatId){
   if(idx >= 0){selectedSeats.splice(idx,1); el?.classList.remove('selected');}
   else{
     if(selectedSeats.length >= 10){showNotif('Максимум 10 орын'); return;}
-    selectedSeats.push({seatId,price:seat.price,label:seat.id,isVIP:seat.isVIP});
+    selectedSeats.push({seatId,price:seat.price,label:seatLabel(seat.id),isVIP:seat.isVIP});
     el?.classList.add('selected');
   }
   renderSelectedSeats();
@@ -947,6 +987,7 @@ function openEdit(id){
   document.getElementById('edit-tag').value = c.tag || '';
   document.getElementById('edit-price').value = c.price;
   document.getElementById('edit-price-rules').value = c.priceRules || '';
+  document.getElementById('edit-layout').value = c.layout;
   document.getElementById('edit-kaspi-num').value = c.kaspiNum || '';
   document.getElementById('edit-kaspi-link').value = c.kaspiLink || '';
   document.getElementById('edit-wa-num').value = c.waNum || '';
@@ -964,7 +1005,7 @@ async function saveEdit(){
     poster: getPosterValue('edit') || c.poster,
     desc: document.getElementById('edit-desc').value.trim(),
     tag: document.getElementById('edit-tag').value.trim(),
-    layout: c.layout,
+    layout: document.getElementById('edit-layout').value,
     price: Number(document.getElementById('edit-price').value),
     priceRules: document.getElementById('edit-price-rules').value.trim(),
     kaspiNum: document.getElementById('edit-kaspi-num').value.trim(),
@@ -972,6 +1013,10 @@ async function saveEdit(){
     waNum: document.getElementById('edit-wa-num').value.trim() || digitsOnly(document.getElementById('edit-kaspi-num').value),
     visible: c.visible
   };
+  if(payload.layout !== c.layout){
+    const taken = c.seats.filter(s => s.status === 'taken').length;
+    if(!confirm(`Зал схемасы ауысады${taken ? ` және ${taken} бронь өшеді` : ''}. Жалғастырасыз ба?`))return;
+  }
   try{
     const data = await apiRequest(`/api/admin/concerts/${id}`, {method:'PUT', body:JSON.stringify(payload)});
     concertsData = data.concerts.map(normalizeConcert);

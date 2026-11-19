@@ -127,40 +127,23 @@ db.exec(`
   );
 `);
 
-function parsePriceRules(text) {
-  const rules = [];
-  String(text || '').split(/\n|;/).forEach(line => {
-    const clean = line.trim();
-    if (!clean) return;
-    const range = clean.match(/(\d+)\s*(?:-|–|—)\s*(\d+)/) || clean.match(/\b(\d+)\b/);
-    const numbers = clean.match(/\d[\d\s]*/g) || [];
-    if (!range || !numbers.length) return;
-    const start = Number(range[1]);
-    const end = Number(range[2] || range[1]);
-    let priceNumber = null;
-    if (/[:=]/.test(clean)) {
-      const after = clean.split(/[:=]/).slice(1).join(':');
-      const priceMatch = after.match(/\d[\d\s]*/);
-      if (priceMatch) priceNumber = Number(priceMatch[0].replace(/\s/g, ''));
-    }
-    if (start && end && priceNumber) rules.push({ start: Math.min(start, end), end: Math.max(start, end), price: priceNumber });
-  });
-  return rules;
-}
-
-function priceForSeatId(id, basePrice, priceRules) {
-  const rule = parsePriceRules(priceRules).find(r => Number(id) >= r.start && Number(id) <= r.end);
-  return rule ? rule.price : Number(basePrice || 0);
-}
+const Halls = require('./public/halls.js');
+const parsePriceRules = Halls.parsePriceRules;
+const priceForSeatId = Halls.priceForSeatId;
+const LAYOUT_NAMES = ['medium', 'large84', 'hall208', 'hall128'];
 
 function getLayoutTable(layout) {
   return layout === 'large84' ? TABLE_LAYOUT_84 : TABLE_LAYOUT_72;
 }
 
+function layoutSeatIds(layout) {
+  return Halls.hallSeatIds(layout) || getLayoutTable(layout).map(t => String(t.id));
+}
+
 function createSeats(concertId, layout, price, priceRules) {
   const insertSeat = db.prepare('INSERT INTO seats (concertId, seatId, price, status, isVIP) VALUES (?, ?, ?, ?, ?)');
-  for (const item of getLayoutTable(layout)) {
-    insertSeat.run(concertId, String(item.id), priceForSeatId(item.id, price, priceRules), 'free', 0);
+  for (const seatId of layoutSeatIds(layout)) {
+    insertSeat.run(concertId, seatId, priceForSeatId(seatId, price, priceRules), 'free', 0);
   }
 }
 
@@ -195,7 +178,7 @@ function allConcerts(includeHidden) {
     FROM concerts c
     LEFT JOIN seats s ON s.concertId = c.id
     ${where}
-    ORDER BY c.date ASC, c.time ASC, CAST(s.seatId AS INTEGER) ASC
+    ORDER BY c.date ASC, c.time ASC, c.id ASC, s.id ASC
   `).all();
 
   const concertMap = new Map();
@@ -226,7 +209,7 @@ function getConcertFull(id) {
   const c = db.prepare('SELECT * FROM concerts WHERE id = ?').get(id);
   if (!c) return null;
   const seats = db.prepare(
-    'SELECT seatId AS id, price, status, isVIP FROM seats WHERE concertId = ? ORDER BY CAST(seatId AS INTEGER)'
+    'SELECT seatId AS id, price, status, isVIP FROM seats WHERE concertId = ? ORDER BY id'
   ).all(id).map(s => ({ ...s, id: String(s.id), isVIP: Boolean(s.isVIP) }));
   return { ...c, visible: Boolean(c.visible), vipPrice: c.price, seats };
 }
@@ -325,7 +308,7 @@ function cleanConcertPayload(body) {
     poster: String(body.poster || '').trim(),
     desc: String(body.desc || '').trim(),
     tag: String(body.tag || '').trim(),
-    layout: body.layout === 'large84' ? 'large84' : 'medium',
+    layout: LAYOUT_NAMES.includes(body.layout) ? body.layout : 'medium',
     price: Number(body.price || 0),
     priceRules: String(body.priceRules || '').trim(),
     kaspiNum: String(body.kaspiNum || '').trim(),

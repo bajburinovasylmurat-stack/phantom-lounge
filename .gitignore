@@ -3,3 +3,4 @@ node_modules/
 asik/data/app.db
 asik/data/app.db-shm
 asik/data/app.db-wal
+backups/

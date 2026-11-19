@@ -49,36 +49,26 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(8,8,8,.95);b
 /* Window SVG style */
 .venue-window-svg{position:absolute;top:0;left:120px;right:60px;pointer-events:none}
 
-.hall-outer{padding:10px;background:#fbf8f2}
-.hall-map{--u:calc(100cqw / 1932);container-type:inline-size;position:relative;width:max(100%,520px);aspect-ratio:1/1;margin:0 auto;background:#fff;color:#1a1208;overflow:hidden;border-radius:6px;font-family:'Cormorant Garamond',Georgia,serif}
+.hall-outer{padding:10px;background:linear-gradient(145deg,#120d08,#070504);border:1px solid rgba(201,168,76,.35)}
+.hall-map{--u:calc(100cqw / 1932);container-type:inline-size;position:relative;width:max(100%,520px);aspect-ratio:1/1;margin:0 auto;overflow:hidden;border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 .hall-map>*{position:absolute}
-.hall-map [style*="--w"]{left:calc(var(--x)*var(--u));top:calc(var(--y)*var(--u));width:calc(var(--w)*var(--u));height:calc(var(--h)*var(--u))}
-.hm-vip{background:#0b6b3a;color:#e8e8e8;display:flex;align-items:center;justify-content:center}
-.hm-vip span{font-size:calc(150*var(--u));letter-spacing:calc(10*var(--u));font-weight:600;background:linear-gradient(180deg,#fff,#9a9a9a 55%,#eee);-webkit-background-clip:text;background-clip:text;color:transparent}
-.hm-vip-top{left:calc(960*var(--u));top:0;right:0;height:calc(415*var(--u));clip-path:polygon(0 0,100% 0,100% 100%,80.2% 38.5%,0 38.5%)}
-.hm-vip-top span{position:absolute;left:calc(380*var(--u));top:calc(-10*var(--u))}
-.hm-vip-bottom{right:0;bottom:0;width:calc(562*var(--u));height:calc(502*var(--u));clip-path:polygon(100% 0,100% 100%,0 100%)}
-.hm-vip-bottom span{position:absolute;left:calc(200*var(--u));top:calc(200*var(--u));transform:rotate(-42deg)}
-.hm-wc{border:calc(5*var(--u)) solid #d42a2a;border-radius:calc(10*var(--u));color:#d42a2a;font:700 calc(34*var(--u)) Jost,sans-serif;display:flex;align-items:center;justify-content:center}
-.hm-wc span{transform:rotate(90deg)}
-.hm-exit{border:calc(5*var(--u)) solid #8a6230;border-bottom:none;display:flex;align-items:flex-end;justify-content:center;font:700 calc(20*var(--u)) Jost,sans-serif;color:#fff}
-.hm-exit::after{content:'';position:absolute;inset:auto calc(25*var(--u)) 0;height:calc(26*var(--u));background:#1f8a3c;z-index:-1}
-.hm-exit{z-index:0;padding-bottom:calc(2*var(--u))}
-.hm-speaker{background:linear-gradient(160deg,#3a3a3a,#0c0c0c);border-radius:calc(14*var(--u));box-shadow:inset 0 0 0 calc(3*var(--u)) #555}
-.hm-pillar{background:#000;border-radius:calc(14*var(--u))}
-.hm-stage{left:calc(510*var(--u));bottom:0;width:calc(890*var(--u));height:calc(277*var(--u));clip-path:polygon(16% 0,86% 0,100% 100%,0 100%);background:radial-gradient(ellipse at 50% 0,rgba(255,215,120,.55),transparent 55%),repeating-linear-gradient(90deg,#8e0f12 0 calc(18*var(--u)),#c0171c calc(18*var(--u)) calc(36*var(--u)));display:flex;align-items:center;justify-content:center}
-.hm-stage span{font:600 calc(56*var(--u)) Jost,sans-serif;letter-spacing:calc(10*var(--u));color:#ffe9b0;text-shadow:0 0 calc(18*var(--u)) rgba(0,0,0,.6)}
-.hm-label{font-size:calc(62*var(--u));white-space:nowrap;display:flex;align-items:center;justify-content:center}
-.hm-A{color:#0e6b3c}.hm-B{color:#d42a2a}.hm-C{color:#2b2ba8}
+.hm-decor{inset:0;width:100%;height:100%;display:block}
+.hm-A{--c1:#2cc27c;--c2:#0b5a37;--c3:#8ff0c0}
+.hm-B{--c1:#ef4a5f;--c2:#7d0f1f;--c3:#ffb3bd}
+.hm-C{--c1:#5f80ff;--c2:#1a2a8a;--c3:#b9c8ff}
 .hm-table{left:calc(var(--x)*var(--u));top:calc(var(--y)*var(--u));width:0;height:0}
-.hm-desk{position:absolute;left:calc(-42*var(--u));top:calc(-68*var(--u));width:calc(84*var(--u));height:calc(136*var(--u));border:calc(3*var(--u)) solid currentColor;background:#fff;box-sizing:border-box}
-.hm-seat{position:absolute;left:calc((var(--x) - 23)*var(--u));top:calc((var(--y) - 20)*var(--u));width:calc(46*var(--u));height:calc(40*var(--u));padding:0;border:calc(3*var(--u)) solid currentColor;border-radius:calc(5*var(--u));background:#fff;color:inherit;font:600 calc(27*var(--u)) Jost,sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;box-sizing:border-box;transition:transform .12s,background .15s}
-.hm-seat.hm-l{border-left-width:calc(8*var(--u))}.hm-seat.hm-r{border-right-width:calc(8*var(--u))}
+.hm-desk{position:absolute;left:calc(-42*var(--u));top:calc(-68*var(--u));width:calc(84*var(--u));height:calc(136*var(--u));border:calc(3*var(--u)) solid #c9a84c;border-radius:calc(8*var(--u));background:linear-gradient(160deg,#4a3520,#241709 60%,#160e05);box-shadow:0 calc(6*var(--u)) calc(16*var(--u)) rgba(0,0,0,.7),inset 0 0 0 calc(5*var(--u)) rgba(201,168,76,.12);box-sizing:border-box}
+.hm-seat{position:absolute;left:calc((var(--x) - 23)*var(--u));top:calc((var(--y) - 20)*var(--u));width:calc(46*var(--u));height:calc(40*var(--u));padding:0;border:calc(3*var(--u)) solid var(--c3);border-radius:calc(7*var(--u));background:linear-gradient(160deg,var(--c1),var(--c2));color:#fff;font:600 calc(25*var(--u)) Jost,sans-serif;text-shadow:0 1px 2px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;cursor:pointer;box-sizing:border-box;box-shadow:0 calc(3*var(--u)) calc(6*var(--u)) rgba(0,0,0,.6);transition:transform .12s,box-shadow .15s,filter .15s}
+.hm-seat.hm-l{border-left:calc(9*var(--u)) solid #e3c56f}.hm-seat.hm-r{border-right:calc(9*var(--u)) solid #e3c56f}
 .hm-seat span{display:block;line-height:1}
-.hm-seat:not(.taken):hover{transform:scale(1.25);z-index:2;background:#fff6d8}
-.hm-seat.selected{background:#f3c84b;color:#1a1208;border-color:#9c7414}
-.hm-seat.taken{background:#4a4a4a;border-color:#4a4a4a;color:#fff;cursor:not-allowed}
+.hm-seat:not(.taken):hover{transform:scale(1.3);z-index:3;filter:brightness(1.2);box-shadow:0 0 calc(14*var(--u)) var(--c1)}
+.hm-seat.selected{background:linear-gradient(160deg,#fff0b0,#e2b74a 55%,#a8801f);border-color:#fff6d0;color:#1a1208;text-shadow:none;box-shadow:0 0 0 calc(3*var(--u)) rgba(255,226,140,.45),0 0 calc(22*var(--u)) rgba(255,210,90,.95);z-index:2}
+.hm-seat.taken{background:linear-gradient(160deg,#3a3a3a,#1c1c1c);border-color:#555;color:transparent;text-shadow:none;cursor:not-allowed;box-shadow:none}
+.hm-seat.taken::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#8a8a8a;font-size:calc(24*var(--u))}
 .seat-admin-grid .hm-seat.taken{cursor:pointer}
+.legend-dot.hall-free{background:linear-gradient(90deg,#2cc27c 33%,#ef4a5f 33% 66%,#5f80ff 66%);border:1px solid #e3c56f}
+.legend-dot.hall-taken{background:#2a2a2a;border:1px solid #555}
+.legend-dot.hall-selected{background:linear-gradient(160deg,#fff0b0,#e2b74a);border:1px solid #fff6d0;box-shadow:0 0 6px rgba(255,210,90,.8)}
 @media(max-width:700px){.hall-map{width:max(100%,680px)}}
 </style>
 </head>
@@ -505,6 +495,100 @@ async function openConcert(id){
     }
   } catch(e){}
 }
+function hallDecorSvg(p){
+  const spk = (x, y, w, h, dir) => {
+    const cx = w/2, wave = dir > 0 ? w + 10 : -10;
+    const arcs = [16, 28, 40].map((r, i) => `<path d="M ${wave} ${h*0.64 - r} A ${r} ${r} 0 0 ${dir > 0 ? 1 : 0} ${wave} ${h*0.64 + r}" fill="none" stroke="#e8c96a" stroke-width="4" stroke-linecap="round" opacity="${0.75 - i*0.2}"/>`).join('');
+    return `<g transform="translate(${x} ${y})">
+      <rect x="4" y="8" width="${w}" height="${h}" rx="${w*0.16}" fill="#000" opacity=".55"/>
+      <rect width="${w}" height="${h}" rx="${w*0.16}" fill="url(#${p}-spk)" stroke="url(#${p}-gold)" stroke-width="4"/>
+      <circle cx="${cx}" cy="${h*0.22}" r="${w*0.13}" fill="url(#${p}-cone)" stroke="#9a8250" stroke-width="2"/>
+      <circle cx="${cx}" cy="${h*0.64}" r="${w*0.36}" fill="url(#${p}-cone)" stroke="url(#${p}-gold)" stroke-width="3"/>
+      <circle cx="${cx}" cy="${h*0.64}" r="${w*0.22}" fill="none" stroke="#3a3a3a" stroke-width="2"/>
+      <circle cx="${cx}" cy="${h*0.64}" r="${w*0.1}" fill="#050505" stroke="#c9a84c" stroke-width="2"/>
+      ${arcs}
+    </g>`;
+  };
+  const pillar = (x, y) => `<g transform="translate(${x} ${y})">
+      <rect x="5" y="8" width="62" height="62" rx="10" fill="#000" opacity=".6"/>
+      <rect width="62" height="62" rx="10" fill="url(#${p}-marble)" stroke="url(#${p}-gold)" stroke-width="4"/>
+      <rect x="12" y="12" width="38" height="38" rx="5" fill="none" stroke="#c9a84c" stroke-width="2" opacity=".8"/>
+    </g>`;
+  const wc = (x, y) => `<g transform="translate(${x} ${y})">
+      <rect width="96" height="150" rx="14" fill="url(#${p}-panel)" stroke="url(#${p}-gold)" stroke-width="4"/>
+      <g fill="#e8c96a">
+        <circle cx="30" cy="34" r="9"/><rect x="22" y="46" width="16" height="34" rx="5"/><rect x="23" y="78" width="6" height="22" rx="3"/><rect x="31" y="78" width="6" height="22" rx="3"/>
+        <circle cx="66" cy="34" r="9"/><path d="M66 45 L80 82 L52 82 Z"/><rect x="59" y="80" width="5" height="20" rx="2.5"/><rect x="68" y="80" width="5" height="20" rx="2.5"/>
+      </g>
+      <line x1="48" y1="28" x2="48" y2="102" stroke="#c9a84c" stroke-width="2" opacity=".6"/>
+      <text x="48" y="134" text-anchor="middle" font-family="Jost,sans-serif" font-weight="700" font-size="28" fill="#f3dc95" letter-spacing="3">WC</text>
+    </g>`;
+  const exit = (x, y) => `<g transform="translate(${x} ${y})">
+      <rect width="170" height="58" rx="10" fill="url(#${p}-exit)" stroke="#bff5cf" stroke-width="3"/>
+      <rect x="12" y="11" width="24" height="36" rx="2" fill="none" stroke="#fff" stroke-width="3.5"/>
+      <path d="M40 29 H58 M51 21 L59 29 L51 37" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="114" y="39" text-anchor="middle" font-family="Jost,sans-serif" font-weight="700" font-size="25" fill="#fff" letter-spacing="2">ШЫҒУ</text>
+    </g>`;
+  const label = (cx, cy, w, sector, color) => `<g>
+      <rect x="${cx - w/2}" y="${cy - 30}" width="${w}" height="60" rx="30" fill="${color}" fill-opacity=".22" stroke="${color}" stroke-width="3"/>
+      <text x="${cx}" y="${cy + 11}" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="600" font-size="34" fill="#f6e7bf" letter-spacing="6">${sector} СЕКТОРЫ</text>
+    </g>`;
+  const crown = (x, y, s) => `<path transform="translate(${x} ${y}) scale(${s})" d="M0 40 L6 8 L22 26 L35 0 L48 26 L64 8 L70 40 Z" fill="url(#${p}-gold)" stroke="#5a4210" stroke-width="2"/>`;
+  return `<svg class="hm-decor" viewBox="0 0 1932 1932" preserveAspectRatio="none" aria-hidden="true">
+    <defs>
+      <radialGradient id="${p}-floor" cx="50%" cy="60%" r="75%"><stop offset="0" stop-color="#21180e"/><stop offset=".6" stop-color="#120d08"/><stop offset="1" stop-color="#070504"/></radialGradient>
+      <pattern id="${p}-tile" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M32 0 L64 32 L32 64 L0 32 Z" fill="none" stroke="#c9a84c" stroke-opacity=".06" stroke-width="2"/></pattern>
+      <linearGradient id="${p}-gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff1b8"/><stop offset=".35" stop-color="#d9b45a"/><stop offset=".65" stop-color="#9c7424"/><stop offset="1" stop-color="#f1d58a"/></linearGradient>
+      <linearGradient id="${p}-vip" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f5c3e"/><stop offset=".55" stop-color="#08402b"/><stop offset="1" stop-color="#04261a"/></linearGradient>
+      <pattern id="${p}-vipdots" width="40" height="40" patternUnits="userSpaceOnUse"><circle cx="20" cy="20" r="2.2" fill="#e8c96a" opacity=".25"/></pattern>
+      <linearGradient id="${p}-spk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b3b3b"/><stop offset=".5" stop-color="#151515"/><stop offset="1" stop-color="#050505"/></linearGradient>
+      <radialGradient id="${p}-cone" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#6a6a6a"/><stop offset=".45" stop-color="#262626"/><stop offset="1" stop-color="#0a0a0a"/></radialGradient>
+      <linearGradient id="${p}-marble" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a3f33"/><stop offset=".5" stop-color="#1d1813"/><stop offset="1" stop-color="#0b0907"/></linearGradient>
+      <linearGradient id="${p}-panel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a1f14"/><stop offset="1" stop-color="#130e09"/></linearGradient>
+      <linearGradient id="${p}-exit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#22b35a"/><stop offset="1" stop-color="#0b6a31"/></linearGradient>
+      <linearGradient id="${p}-wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a3518"/><stop offset="1" stop-color="#2a170a"/></linearGradient>
+      <linearGradient id="${p}-fold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4a050a"/><stop offset=".45" stop-color="#b3121d"/><stop offset=".6" stop-color="#d42630"/><stop offset="1" stop-color="#4a050a"/></linearGradient>
+      <pattern id="${p}-velvet" width="44" height="300" patternUnits="userSpaceOnUse"><rect width="44" height="300" fill="url(#${p}-fold)"/></pattern>
+      <radialGradient id="${p}-spot" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#fff2c2" stop-opacity=".85"/><stop offset=".5" stop-color="#f5c75a" stop-opacity=".25"/><stop offset="1" stop-color="#f5c75a" stop-opacity="0"/></radialGradient>
+      <clipPath id="${p}-stageclip"><path d="M655 1655 H1275 L1400 1932 H510 Z"/></clipPath>
+    </defs>
+    <rect width="1932" height="1932" fill="url(#${p}-floor)"/>
+    <rect width="1932" height="1932" fill="url(#${p}-tile)"/>
+    <rect x="6" y="6" width="1920" height="1920" rx="18" fill="none" stroke="url(#${p}-gold)" stroke-width="5" opacity=".55"/>
+
+    <path d="M960 0 H1932 V415 L1740 160 H960 Z" fill="url(#${p}-vip)"/>
+    <path d="M960 0 H1932 V415 L1740 160 H960 Z" fill="url(#${p}-vipdots)"/>
+    <path d="M960 0 V160 H1740 L1932 415" fill="none" stroke="url(#${p}-gold)" stroke-width="6"/>
+    ${crown(1290, 34, 1.2)}
+    <text x="1500" y="128" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="700" font-size="128" fill="url(#${p}-gold)" letter-spacing="18" stroke="#3a2a08" stroke-width="2">VIP</text>
+    <path d="M1370 1932 L1932 1430 V1932 Z" fill="url(#${p}-vip)"/>
+    <path d="M1370 1932 L1932 1430 V1932 Z" fill="url(#${p}-vipdots)"/>
+    <path d="M1370 1932 L1932 1430" fill="none" stroke="url(#${p}-gold)" stroke-width="6"/>
+    <g transform="translate(1745 1790) rotate(-42)">
+      ${crown(-42, -150, 1.2)}
+      <text x="0" y="0" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="700" font-size="118" fill="url(#${p}-gold)" letter-spacing="16" stroke="#3a2a08" stroke-width="2">VIP</text>
+    </g>
+
+    <g clip-path="url(#${p}-stageclip)">
+      <rect x="500" y="1650" width="920" height="290" fill="url(#${p}-wood)"/>
+      <path d="M920 1700 L1010 1700 L1130 1932 L800 1932 Z" fill="url(#${p}-spot)"/>
+      <path d="M640 1650 H880 Q840 1790 790 1940 H500 Z" fill="url(#${p}-velvet)"/>
+      <path d="M1290 1650 H1050 Q1090 1790 1140 1940 H1420 Z" fill="url(#${p}-velvet)"/>
+      <rect x="600" y="1650" width="730" height="34" fill="url(#${p}-velvet)"/>
+      <rect x="600" y="1682" width="730" height="6" fill="url(#${p}-gold)"/>
+      ${Array.from({length:30}, (_, i) => `<circle cx="${640 + i*22}" cy="1692" r="6" fill="url(#${p}-gold)"/>`).join('')}
+    </g>
+    <path d="M655 1655 H1275 L1400 1932 H510 Z" fill="none" stroke="url(#${p}-gold)" stroke-width="6"/>
+    <rect x="790" y="1800" width="350" height="92" rx="46" fill="#140803" fill-opacity=".82" stroke="url(#${p}-gold)" stroke-width="4"/>
+    <text x="965" y="1870" text-anchor="middle" font-family="Cormorant Garamond,Georgia,serif" font-weight="700" font-size="66" fill="#ffe7a3" letter-spacing="14">САХНА</text>
+
+    ${spk(258, 8, 104, 166, 1)}${spk(1622, 172, 104, 166, -1)}${spk(462, 1742, 70, 112, -1)}${spk(1398, 1742, 70, 112, 1)}
+    ${pillar(572, 610)}${pillar(1309, 610)}${pillar(562, 1274)}${pillar(1299, 1274)}
+    ${wc(14, 18)}${wc(14, 396)}
+    ${exit(615, 8)}${exit(70, 1866)}
+    ${label(400, 262, 300, 'A', '#1f9d63')}${label(967, 188, 300, 'B', '#d8344a')}${label(1430, 292, 254, 'C', '#4a6cf0')}
+  </svg>`;
+}
 function renderHallMap(c, adminMode=false){
   const hall = HALL_LAYOUTS[c.layout];
   const seatsById = new Map(c.seats.map(s => [String(s.id), s]));
@@ -521,16 +605,8 @@ function renderHallMap(c, adminMode=false){
     }).join('');
     return `<div class="hm-table hm-${t.sector}" style="--x:${t.x};--y:${t.y};transform:rotate(${t.a}deg)"><div class="hm-desk"></div>${chairs}</div>`;
   }).join('');
-  const box = (cls, x, y, w, h, inner='') => `<div class="${cls}" style="--x:${x};--y:${y};--w:${w};--h:${h}">${inner}</div>`;
   return `<div class="venue-map-outer hall-outer"><div class="hall-map">
-    <div class="hm-vip hm-vip-top"><span>VIP</span></div>
-    <div class="hm-vip hm-vip-bottom"><span>VIP</span></div>
-    ${box('hm-wc',4,20,44,100,'<span>WC</span>')}${box('hm-wc',4,400,44,100,'<span>WC</span>')}
-    ${box('hm-exit',640,0,120,40,'ШЫҒУ')}${box('hm-exit',88,1892,120,40,'ШЫҒУ')}
-    ${box('hm-speaker',258,6,104,168)}${box('hm-speaker',1622,164,104,168)}${box('hm-speaker',474,1750,62,104)}${box('hm-speaker',1398,1750,62,104)}
-    ${box('hm-pillar',572,610,62,62)}${box('hm-pillar',1309,610,62,62)}${box('hm-pillar',562,1274,62,62)}${box('hm-pillar',1299,1274,62,62)}
-    <div class="hm-stage"><span>САХНА</span></div>
-    ${box('hm-label hm-A',150,170,460,80,'A - секторы')}${box('hm-label hm-B',740,150,460,80,'B - секторы')}${box('hm-label hm-C',1290,230,460,80,'C - секторы')}
+    ${hallDecorSvg(adminMode ? 'hma' : 'hmp')}
     ${tablesHtml}
   </div></div>`;
 }
@@ -753,9 +829,9 @@ function renderConcertDetail(c){
       ${c.desc ? `<p style="font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:32px;max-width:600px">${escapeHtml(c.desc)}</p>` : ''}
       <div class="seat-map-title">Орын Картасы</div>
       <div class="seat-legend">
-        <div class="legend-item"><div class="legend-dot free"></div>Бос</div>
-        <div class="legend-item"><div class="legend-dot taken" ${isHallLayout(c.layout)?'style="background:#4a4a4a;border-color:#4a4a4a"':''}></div>Сатылған / бронь</div>
-        <div class="legend-item"><div class="legend-dot selected"></div>Таңдалған</div>
+        <div class="legend-item"><div class="legend-dot ${isHallLayout(c.layout)?'hall-free':'free'}"></div>Бос</div>
+        <div class="legend-item"><div class="legend-dot ${isHallLayout(c.layout)?'hall-taken':'taken'}"></div>Сатылған / бронь</div>
+        <div class="legend-item"><div class="legend-dot ${isHallLayout(c.layout)?'hall-selected':'selected'}"></div>Таңдалған</div>
       </div>
       ${renderVenueMap(c)}
     </div>

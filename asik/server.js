@@ -149,7 +149,7 @@ function createSeats(concertId, layout, price, priceRules) {
 
 const DEFAULT_CONCERTS = [
   {name:'Dimash Qudaibergen - Live',artist:'Dimash Qudaibergen',date:'2026-08-15',time:'20:00',poster:'',desc:'Әлемге танымал қазақстандық әнші Димаш Құдайбергеннің Алматыдағы концерт кеші.',tag:'Хит',layout:'large84',price:8000,priceRules:'',kaspiNum:'+7 707 000 00 01',kaspiLink:'',waNum:'77070000001',visible:1},
-  {name:'Jazz Night - ORDO Sessions',artist:'ORDO All-Stars',date:'2026-07-20',time:'21:00',poster:'',desc:'ORDO Resto-Bar атмосферасындағы тірі джаз кеші.',tag:'Жаңа',layout:'medium',price:5000,priceRules:'',kaspiNum:'+7 707 000 00 01',kaspiLink:'',waNum:'77070000001',visible:1},
+  {name:'Jazz Night - Phantom Sessions',artist:'Phantom Lounge All-Stars',date:'2026-07-20',time:'21:00',poster:'',desc:'Phantom Lounge атмосферасындағы тірі джаз кеші.',tag:'Жаңа',layout:'medium',price:5000,priceRules:'',kaspiNum:'+7 707 000 00 01',kaspiLink:'',waNum:'77070000001',visible:1},
   {name:'Deep House Party',artist:'DJ Resident + Guest',date:'2026-07-06',time:'23:00',poster:'',desc:'Deep house және tech house кеші.',tag:'',layout:'medium',price:3500,priceRules:'',kaspiNum:'+7 707 000 00 01',kaspiLink:'',waNum:'77070000001',visible:1}
 ];
 
@@ -478,5 +478,5 @@ server.on('clientError', (err, socket) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`ORDO Resto-Bar server running on port ${PORT}`);
+  console.log(`Phantom Lounge server running on port ${PORT}`);
 });
